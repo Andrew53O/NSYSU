@@ -1,0 +1,29 @@
+Q1=q1
+Q2=q2
+Q3=q3
+Q4=q4
+clear
+make
+if [ "$Q1"!="N" ]; then
+	echo "----------Q1----------"
+	./$Q1 <<< "5 -9
+		13 56
+		-12"
+fi
+if [ "$Q2"!="N" ]; then
+	echo "----------Q2----------"
+	./$Q2 <<< "a1s2d3f4"
+fi
+if [ "$Q3"!="N" ]; then
+	echo "----------Q3----------"
+	./$Q3 <<< "TWD465"
+	echo "----------"
+	./$Q3 <<< "USD123"
+	echo "----------"
+	./$Q3 <<< "AND123"
+fi
+if [ "$Q4"!="N" ]; then
+	echo "----------Q4----------"
+	./$Q4 <<< "The irate tortoise said: \"Who do you think you are? There’s no denying you’re swift, but even you can be beaten!\". The hare squealed with laughter, saying, \"I bet there’s nobody in the world that can win against me, I’m so speedy. Now, why don’t you try?\".
+		YOU i EOF"
+fi

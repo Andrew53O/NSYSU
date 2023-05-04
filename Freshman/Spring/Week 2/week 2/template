@@ -1,0 +1,47 @@
+#include <iostream>
+using namespace std;
+
+
+
+
+
+int main(void)
+{
+	int a, b,c, temp;
+	cout << "Enter three integers :"
+	cin >> a;
+	cin >> b;
+	cin >> c:
+	
+	if (a > b)
+	{
+	 // swap a with b
+	 temp = b;
+	 b = a;
+	 a = temp;
+	}
+	else if ( a > c)
+	{
+	
+	// swap b with c
+	temp = c;
+	c = a;
+	a = temp;
+	}
+	
+	if ( b > c)
+	{
+		temp = b;
+		b = c;
+		c = temp;
+			
+	}
+	
+	cout << a << b << c;
+	
+
+
+
+
+	return 0;
+}

@@ -1,0 +1,1 @@
+latihan week 4 ini sama kek week 3 yang tahun lalu
