@@ -198,3 +198,16 @@ TwoD::~TwoD()
 
 // constructor pakek pas declare aja? iya
 // *this artinya apa ya? derefernce, since this is a pointer, so *this, get the value
+
+
+// kenapa kalau misal
+// class3 = class1 + class2
+
+// operator overloading + obj + obj return obj
+// kek a = 5 + 7;
+// kek a = 12;
+
+// obj= obj + obj
+// pas overloading gimana ya?
+
+
