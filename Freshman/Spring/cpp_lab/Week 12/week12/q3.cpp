@@ -117,8 +117,6 @@ TwoD::TwoD(const TwoD& oldObj)
 	// since copy itself
 	row = oldObj.row;
 	col = oldObj.col;
-	cout << " matrix2 = " << oldObj.getRow() << endl;
-	cout << "row = " << row << endl;
 	// redefine p
 	p = new int*[row];
 	
@@ -138,6 +136,9 @@ TwoD::TwoD(const TwoD& oldObj)
 	}
 
 }
+
+// this member function combine the calling and the called object into one calling object, and return it
+// i don't recommend this, cause when you use this function, the calling object changed
 
 TwoD& TwoD::operator +(TwoD& obj)
 {
