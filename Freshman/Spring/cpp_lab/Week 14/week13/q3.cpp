@@ -10,17 +10,19 @@ class Character
 	public:
 	Character()
 	{
-	
+		//intentionally empty
 	}
 	
 	Character(int lel, int ex, string n)
 	{
+		// exp now
 		ex = pow((lel - 1), 2) * EXP_LV;
-		
+		// calculate upper bound
 		int top = pow((lel), 2) * EXP_LV;
+
 		level = lel;
+
 		exp = ex;
-		
 		exp2 = top;
 		
 		name = n;
@@ -55,7 +57,7 @@ class Character
 	}
 	
 	
-	void levelUp();
+	void levelUp(); 
 	
 	
 
@@ -67,8 +69,6 @@ class Character
 	int getLevel()
 	{
 		return level;
-		
-		
 	}
 	
 	int getExp()
@@ -99,7 +99,7 @@ class Knight : public Character
 		
 	}
 	
-	Knight(int l, int e, string n) : Character(l,e, n)
+	Knight(int l, int e, string n) : Character(l,e, n) // called Character constructor
 	{
 		
 	}
@@ -147,8 +147,5 @@ int main(void)
 	Tsukasa.print();
 	Rose.print();
 	
-	
-	
-
 	return 0;
 }

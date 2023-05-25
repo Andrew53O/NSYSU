@@ -21,7 +21,7 @@ using namespace Pokemon_lib;
 int main(void)
 {
 	// for more explanation = https://stackoverflow.com/questions/8777724/store-derived-class-objects-in-base-class-variables
-	vector <Poke*> v; 
+	vector <Poke*> v;  // but i think you use normal vector
 	// ------------------------------Q1------------------------------
 	Fire one("Charmander", "fire", 10, 3); one.output();
 	v.push_back(&one);
@@ -134,13 +134,6 @@ int main(void)
 	} 
 	
 	cout << " dead" << endl;
-	
-	
-	
-	
-	
-	
-	
 	
 	
 	return 0;

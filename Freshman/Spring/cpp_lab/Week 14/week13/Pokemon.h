@@ -32,9 +32,7 @@ namespace Pokemon_lib
 		
 		void output();
 		
-		
 
-		
 		private:
 		string name;
 		string type;
