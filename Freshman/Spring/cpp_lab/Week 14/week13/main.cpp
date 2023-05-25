@@ -5,9 +5,14 @@
 // inget apa yang tadi digambar ama si zhujiao
 // jadi si HEADER Fire, Water ama Grass punya bapak Pokemon header, jadi ga ush include itu lagi
 
-#include "Fire.h"
+/* method 1
 #include "Water.h"
+#include "Fire.h"
 #include "Grass.h"
+
+*/ 
+
+#include "Pokemon.h" // method 2 but in the Pokemon.h i also include that three in the botoom of the file
 
 using namespace std;
 using namespace Pokemon_lib;

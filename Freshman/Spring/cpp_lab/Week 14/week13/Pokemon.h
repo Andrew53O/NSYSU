@@ -9,6 +9,7 @@
 using namespace std;
 
 
+
 namespace Pokemon_lib
 {
 	class Poke
@@ -45,5 +46,11 @@ namespace Pokemon_lib
 
 
 }
+
+/*
+#include "Water.h"
+#include "Fire.h"
+#include "Grass.h"
+*/
 
 #endif
