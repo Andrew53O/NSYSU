@@ -37,5 +37,13 @@ int main(void)
 	matrix3 = matrix1 * matrix2;
 	cout << "matrix3 = " << endl;
 	matrix3.output();
+
+	cout << "testing---------------------" << endl;
+	TwoD testing_destruc;
+
+	// error happen
+	//testing_destruc = TwoD(5, 7);
+	cout << "end of code" << endl;
+
 return 0;
 }

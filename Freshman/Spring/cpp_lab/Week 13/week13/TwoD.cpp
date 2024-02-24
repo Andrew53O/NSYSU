@@ -143,6 +143,8 @@ TwoD TwoD::operator *(TwoD obj)
 
 TwoD::~TwoD()
 {
+	cout << "calling destructor" << endl;
+	cout << this->row << endl;
 	for (int i = 0; i < row; i++)
 	{
 		delete [] p[i];
