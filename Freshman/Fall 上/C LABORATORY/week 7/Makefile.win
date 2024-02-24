@@ -1,0 +1,31 @@
+# Project: week7sorting
+# Makefile created by Dev-C++ 5.11
+
+CPP      = g++.exe
+CC       = gcc.exe
+WINDRES  = windres.exe
+OBJ      = "coba\ ulang\ di\ dorm/selection\ sort.o" "coba\ ulang\ di\ dorm/insertion\ sort.o" Untitled23.o
+LINKOBJ  = "coba ulang di dorm/selection sort.o" "coba ulang di dorm/insertion sort.o" Untitled23.o
+LIBS     = -L"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib" -L"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/lib" -static-libgcc
+INCS     = -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include"
+CXXINCS  = -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include/c++"
+BIN      = week7sorting.exe
+CXXFLAGS = $(CXXINCS) 
+CFLAGS   = $(INCS) 
+RM       = rm.exe -f
+
+.PHONY: all all-before all-after clean clean-custom
+
+all: all-before $(BIN) all-after
+
+clean: clean-custom
+	${RM} $(OBJ) $(BIN)
+
+$(BIN): $(OBJ)
+	$(CC) $(LINKOBJ) -o $(BIN) $(LIBS)
+
+"coba\ ulang\ di\ dorm/selection\ sort.o": coba\ ulang\ di\ dorm/selection\ sort.c
+	$(CC) -c "coba ulang di dorm/selection sort.c" -o "coba ulang di dorm/selection sort.o" $(CFLAGS)
+
+"coba\ ulang\ di\ dorm/insertion\ sort.o": coba\ ulang\ di\ dorm/insertion\ sort.c
+	$(CC) -c "coba ulang di dorm/insertion sort.c" -o "coba ulang di dorm/insertion sort.o" $(CFLAGS)
