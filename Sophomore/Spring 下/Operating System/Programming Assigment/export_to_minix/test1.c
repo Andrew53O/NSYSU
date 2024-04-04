@@ -32,6 +32,18 @@ void process_input(char* buffer, char* array[])
 // Executing the input
 void execute_input(char* array[])
 {
+    // Check if the last argument is '&'
+    int background = 0;
+    char **last_arg;
+    for (last_arg = array; *last_arg != NULL; last_arg++)
+        ; // Moving pointer to the last argument
+
+    if (last_arg > array && strcmp(*(last_arg - 1), "&") == 0)
+    {
+        background = 1;
+        *(last_arg - 1) = NULL; // Remove '&' from arguments
+    }
+
     pid_t pid = fork(); // Create a new process
 
     if (pid < 0)
@@ -42,13 +54,15 @@ void execute_input(char* array[])
     else if (pid > 0)
     {
         // Parent process
-        int status;
-        waitpid(pid, &status, 0); // Wait for the child process to finish and free the child memory, prevent zombie process
+        if (!background)
+        {
+            int status;
+            waitpid(pid, &status, 0); // Wait for the child process to finish and free the child memory, prevent zombie process
+        }
     }
     else
     {
         // Child process
-       
         execvp(array[0], array);
         perror("execvp");
         exit(EXIT_FAILURE); // macro that represent failure exit, usually set to 1
