@@ -31,6 +31,8 @@ void process_input(char* buffer, char* array[])
     }
 
     array[i] = NULL;
+
+    
 }
 
 
@@ -39,7 +41,7 @@ void execute_input(char* array[])
 {
     int background = 0;
     checkAmpersand(array, &background); // Check '&'
-
+    
     pid_t pid = fork(); // Create a new process
 
     if (pid < 0)
@@ -58,19 +60,44 @@ void execute_input(char* array[])
     }
     else
     {
+        
         // Child process
         int io_value = 0;
-        char* file_name = "";
+        int file2;
+        char file_name[256] = "";
         checkRedirection(array, &io_value, file_name);
 
-        printf("io value->%dEND",io_value);
-        printf("file name->%sEND",file_name);
+        // check valid input 
+        if (!(io_value == 0 || strcmp(file_name, "") == 0 ))
+        {
+            if (io_value == 1)
+            {
 
 
+            }
+            else if (io_value == 2)
+            {
+                int file = open(file_name, O_WRONLY | O_CREAT, 0777);
+                if (file == -1)
+                {
+                    printf("File error while opening");
+                    return;
+                }
 
-        // execvp(array[0], array);
-        // perror("execvp");
-        // exit(EXIT_FAILURE); // macro that represent failure exit, usually set to 1
+                // overwrite the stdout with the file 
+                file2 = dup2(file, STDOUT_FILENO);
+                close(file); // close the additional process 
+            }
+            
+        }
+
+        execvp(array[0], array);
+        perror("execvp");
+
+        close(file2);
+        exit(EXIT_FAILURE); // macro that represent failure exit, usually set to 1
+
+        
     }
 
 }
@@ -79,7 +106,6 @@ void execute_input(char* array[])
 // Checking whether exists redirection 
 void checkRedirection(char* array[], int* io_value, char* file_name)
 {
-    printf("masuk function1");
     int i = 0;
     while(array[i] != NULL && *io_value == 0) // check "<" or ">"
     {
@@ -93,10 +119,9 @@ void checkRedirection(char* array[], int* io_value, char* file_name)
         }
         i++;
     }
-     printf("masuk function2");
+
     if (*io_value != 0) // found "<" or ">"
     {
-        printf("masuk function3");
         // Check how much argument provided
         int count_redirected_argument = 0;
         int temp_i = i; // the file_name position 
@@ -109,7 +134,7 @@ void checkRedirection(char* array[], int* io_value, char* file_name)
         if(count_redirected_argument == 1)
         {
             strcpy(file_name, array[temp_i]); // copy the file name
-            printf("copied file");
+            array[temp_i - 1] = NULL; // overwite the angle bracket
         }
         else if (count_redirected_argument == 0)
         {
@@ -157,7 +182,6 @@ int main()
     char buffer[MAX_LINE_LENGTH];
     char* arguments[MAX_ARGUMENT];
     
-
     while(1)
     {
         // count of argument in current line 
@@ -180,7 +204,7 @@ int main()
             printf("%s: not found.\n", buffer);
         }
 
-        printf("\n");
+        printf("newline\n");
     }
 
 
