@@ -63,7 +63,7 @@ void execute_input(char* array[])
         
         // Child process
         int io_value = 0;
-        int file2;
+        int file2, file_read;
         char file_name[256] = "";
         checkRedirection(array, &io_value, file_name);
 
@@ -72,15 +72,27 @@ void execute_input(char* array[])
         {
             if (io_value == 1)
             {
+                file_read = open(file_name, O_RDONLY);
+                if (file_read == -1)
+                {
+                    printf("File error while opening in redirecting input");
+                    return;
+                }
+                
+                // Duplicate the file descriptor to standard input
+                if (dup2(file_read, STDIN_FILENO) == -1)
+                {
+                    printf("Error redirecting input");
+                }
 
-
+                close(file_read);
             }
             else if (io_value == 2)
             {
                 int file = open(file_name, O_WRONLY | O_CREAT, 0777);
                 if (file == -1)
                 {
-                    printf("File error while opening");
+                    printf("File error while opening in redirecting output");
                     return;
                 }
 
@@ -96,10 +108,7 @@ void execute_input(char* array[])
 
         close(file2);
         exit(EXIT_FAILURE); // macro that represent failure exit, usually set to 1
-
-        
     }
-
 }
 
 
