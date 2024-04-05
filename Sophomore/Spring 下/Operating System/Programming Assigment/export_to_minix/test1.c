@@ -6,14 +6,14 @@
 #include <sys/wait.h> // waitpid()
 #include <fcntl.h> // arguments use by open() 
 
-
 #define MAX_LINE_LENGTH 256
 #define MAX_ARGUMENT 50
 
-
 void checkAmpersand(char* array[], int* background);
+void checkPipe(char* array[], int* pipe, char* array2[]);
 void debug_print(char* array[]);
-void checkRedirection(char* array[], int* io_value, char* file_name);
+void checkRedirectionPipe(char* array[], int* io_value, char* file_name);
+
 
 void process_input(char* buffer, char* array[])
 {
@@ -32,16 +32,29 @@ void process_input(char* buffer, char* array[])
 
     array[i] = NULL;
 
-    
 }
 
 
 // Executing the input
 void execute_input(char* array[])
 {
-    int background = 0;
+    char* array2[MAX_ARGUMENT];
+    int background = 0, pipeExist = 0;
+    int file_descriptor[2];
     checkAmpersand(array, &background); // Check '&'
-    
+    // check '|' and create array2 for the right argument
+    checkPipe(array, &pipeExist, array2); 
+
+    debug_print(array2);
+    if(pipeExist == 1)
+    {
+        if (pipe(file_descriptor) == -1) // create pipe for the file_descriptor
+        {
+            perror("file failed");
+            return;
+        }
+    }
+
     pid_t pid = fork(); // Create a new process
 
     if (pid < 0)
@@ -52,20 +65,51 @@ void execute_input(char* array[])
     else if (pid > 0)
     {
         // Parent process
-        if (background == 0)
+        if (pipeExist == 1)
+        {
+            pid_t pid2 = fork();
+
+            if (pid2 == 0) 
+            {
+                // Child process
+                close(file_descriptor[1]); // Close the unused write end
+                dup2(file_descriptor[0], STDIN_FILENO); // Read from pipe
+                close(file_descriptor[0]);
+
+                execvp(array2[0], array2);
+                perror("execvp");
+                exit(EXIT_FAILURE);
+            } 
+            else if (pid2 > 0) 
+            {
+                // Parent process
+                close(file_descriptor[0]);
+                close(file_descriptor[1]);
+
+                int status1, status2;
+                waitpid(pid, &status1, 0); // Wait for the first child process to finish
+                waitpid(pid2, &status2, 0); // Wait for the second child process to finish
+            }
+            else
+            {
+                // Fork Failed
+                perror("fork");
+            }
+        }
+        else if (background == 0)
         {
             int status;
             waitpid(pid, &status, 0); // Wait for the child process to finish and free the child memory, prevent zombie process
         }
+
     }
     else
     {
-        
         // Child process
         int io_value = 0;
         int file2, file_read;
         char file_name[256] = "";
-        checkRedirection(array, &io_value, file_name);
+        checkRedirectionPipe(array, &io_value, file_name);
 
         // check valid input 
         if (!(io_value == 0 || strcmp(file_name, "") == 0 ))
@@ -100,20 +144,34 @@ void execute_input(char* array[])
                 file2 = dup2(file, STDOUT_FILENO);
                 close(file); // close the additional process 
             }
+            else if (io_value == 3) // pipe
+            {
+                // copy the write file descriptor to the pipe
+                dup2(file_descriptor[1], STDOUT_FILENO); 
+                close(file_descriptor[0]);
+                close(file_descriptor[1]);
+            }
             
         }
-
         execvp(array[0], array);
         perror("execvp");
 
         close(file2);
         exit(EXIT_FAILURE); // macro that represent failure exit, usually set to 1
     }
+
+    if(pipeExist == 1)
+    {
+        // close the main process file descriptor
+        close(file_descriptor[0]);
+        close(file_descriptor[1]);
+    }
+   
 }
 
 
 // Checking whether exists redirection 
-void checkRedirection(char* array[], int* io_value, char* file_name)
+void checkRedirectionPipe(char* array[], int* io_value, char* file_name)
 {
     int i = 0;
     while(array[i] != NULL && *io_value == 0) // check "<" or ">"
@@ -126,10 +184,14 @@ void checkRedirection(char* array[], int* io_value, char* file_name)
         {
             *io_value = 2;
         }
+        else if (strcmp(array[i], "|") == 0)
+        {
+            *io_value = 3;
+        }
         i++;
     }
 
-    if (*io_value != 0) // found "<" or ">"
+    if (*io_value == 1 || *io_value == 2) // found "<" or ">"
     {
         // Check how much argument provided
         int count_redirected_argument = 0;
@@ -175,10 +237,31 @@ void checkAmpersand(char* array[], int* background)
     }
 }
 
+// Checking whether exists '|'
+void checkPipe(char* array[], int* pipeExist, char* array2[])
+{
+    int j = 0;
+    int i = 0;
+    while(array[i] != NULL) 
+    {
+        if (*pipeExist == 1)
+        {
+            array2[j] = array[i];
+            j++;
+        }
+        else if (strcmp(array[i], "|") == 0)
+        {
+            *pipeExist = 1;
+            array[i] = NULL; // replace the "|" to end the array
+        }
+        i++;
+    }
+    array2[j] = NULL;
+}
+
 void debug_print(char* array[])
 {
     int i = 0;
-
     while(array[i] != NULL) 
     {
         printf("inside array%sEND\n", array[i]);

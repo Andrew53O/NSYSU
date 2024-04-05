@@ -16,10 +16,14 @@ Making fork in my code, so that it can be active
     ---- runtime error karna harus malloc si pointer 
 
 
+5. bikin pipe
+
+6. bikin cd
 
 
 
 
+test semua function bisa lancar
 check sebelum kumpul
 1. search debug_print()
 2. hapus debug_print()

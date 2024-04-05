@@ -1,9 +1,5 @@
-b
-a
-c
-shengjie
+bagian
 andrew
-surya
-cccc
-bbbbb
-aaaa
+kucing
+angel
+using

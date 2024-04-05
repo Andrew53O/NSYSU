@@ -1,0 +1,7 @@
+total 28
+-rwxrwxrwx 1 andrew andrew    51 Apr  5 15:59 input1.txt
+-rwxrwxrwx 1 andrew andrew     0 Apr  4 21:22 output.md
+-rwxrwxrwx 1 andrew andrew 16976 Apr  5 18:02 t
+-rwxrwxrwx 1 andrew andrew  5399 Apr  5 18:02 test1.c
+-rwxrwxrwx 1 andrew andrew     0 Apr  5 18:02 word.txt
+-rwxrwxrwx 1 andrew andrew     0 Apr  5 18:01 wordcount.txt
