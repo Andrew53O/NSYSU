@@ -41,3 +41,9 @@ pipe(fd[0]), pipe(fd[1])
     - jadi ada input ama output
 2. pipe harus bisa multiple 
     - klo pipe jadi pakek for loop
+
+
+
+
+problem 
+1. ls & ga bisa balik ke andrew shell 
