@@ -1,0 +1,9 @@
+total 72
+-rwxr-xr-x  1 root  operator     36 Apr  5 12:28 input1.txt
+-rwxr-xr-x  1 root  operator   9883 Apr  5 13:13 m
+-rwxr-xr-x  1 root  operator      0 Apr  4 13:22 output.md
+-rwxr-xr-x  1 root  operator      0 Apr  5 13:14 outputminix.txt
+-rwxr-xr-x  1 root  operator  17064 Apr  5 13:13 t
+-rwxr-xr-x  1 root  operator   7811 Apr  5 13:13 test1.c
+-rwxr-xr-x  1 root  operator    339 Apr  5 10:02 word.txt
+-rwxr-xr-x  1 root  operator      0 Apr  5 10:01 wordcount.txt

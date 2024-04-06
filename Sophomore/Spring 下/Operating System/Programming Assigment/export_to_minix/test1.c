@@ -14,7 +14,6 @@ void checkPipe(char* array[], int* pipe, char* array2[]);
 void debug_print(char* array[]);
 void checkRedirectionPipe(char* array[], int* io_value, char* file_name);
 
-
 void process_input(char* buffer, char* array[])
 {
     char* token; 
@@ -31,9 +30,7 @@ void process_input(char* buffer, char* array[])
     }
 
     array[i] = NULL;
-
 }
-
 
 // Executing the input
 void execute_input(char* array[])
@@ -62,48 +59,7 @@ void execute_input(char* array[])
         // Fork Failed
         perror("fork");
     }
-    else if (pid > 0)
-    {
-        // Parent process
-        if (pipeExist == 1)
-        {
-            pid_t pid2 = fork();
-
-            if (pid2 == 0) 
-            {
-                // Child process
-                close(file_descriptor[1]); // Close the unused write end
-                dup2(file_descriptor[0], STDIN_FILENO); // Read from pipe
-                close(file_descriptor[0]);
-
-                execvp(array2[0], array2);
-                perror("execvp");
-                exit(EXIT_FAILURE);
-            } 
-            else if (pid2 > 0) 
-            {
-                // Parent process
-                close(file_descriptor[0]);
-                close(file_descriptor[1]);
-
-                int status1, status2;
-                waitpid(pid, &status1, 0); // Wait for the first child process to finish
-                waitpid(pid2, &status2, 0); // Wait for the second child process to finish
-            }
-            else
-            {
-                // Fork Failed
-                perror("fork");
-            }
-        }
-        else if (background == 0)
-        {
-            int status;
-            waitpid(pid, &status, 0); // Wait for the child process to finish and free the child memory, prevent zombie process
-        }
-
-    }
-    else
+    else if (pid == 0)
     {
         // Child process
         int io_value = 0;
@@ -112,7 +68,7 @@ void execute_input(char* array[])
         checkRedirectionPipe(array, &io_value, file_name);
 
         // check valid input 
-        if (!(io_value == 0 || strcmp(file_name, "") == 0 ))
+        if (!(io_value == 0 || strcmp(file_name, "") == 0))
         {
             if (io_value == 1)
             {
@@ -148,8 +104,6 @@ void execute_input(char* array[])
             {
                 // copy the write file descriptor to the pipe
                 dup2(file_descriptor[1], STDOUT_FILENO); 
-                close(file_descriptor[0]);
-                close(file_descriptor[1]);
             }
             
         }
@@ -157,18 +111,59 @@ void execute_input(char* array[])
         perror("execvp");
 
         close(file2);
-        exit(EXIT_FAILURE); // macro that represent failure exit, usually set to 1
-    }
-
-    if(pipeExist == 1)
-    {
-        // close the main process file descriptor
         close(file_descriptor[0]);
         close(file_descriptor[1]);
+        exit(EXIT_FAILURE); // macro that represent failure exit, usually set to 1
     }
-   
-}
+    else
+    {
+        // Parent process
+        if (background == 0 && pipeExist == 0)
+        {
+            int status;
+            waitpid(pid, &status, 0); // Wait for the child process to finish and free the child memory, prevent zombie process
+        }
 
+        // Parent process
+        if (pipeExist == 1)
+        {
+            pid_t pid2 = fork();
+
+            if (pid2 == 0) 
+            {
+                // Child process
+                close(file_descriptor[1]); // Close the unused write end
+                dup2(file_descriptor[0], STDIN_FILENO); // Read from pipe
+               
+                execvp(array2[0], array2);
+                close(file_descriptor[0]);
+                perror("execvp");
+                exit(EXIT_FAILURE);
+            } 
+            else if (pid2 > 0) 
+            {
+                // Parent process
+                close(file_descriptor[0]);
+                close(file_descriptor[1]);
+
+                int status;
+                int status2;
+                waitpid(pid, &status, 0); // Wait for the child process to finish and free the child memory, prevent zombie process
+                waitpid(pid2, &status2, 0); // Wait for the second child process to finish
+            }
+            else
+            {
+                // Fork Failed
+                perror("fork");
+            }
+
+            
+        }
+    }
+
+    close(file_descriptor[0]);
+    close(file_descriptor[1]);
+}
 
 // Checking whether exists redirection 
 void checkRedirectionPipe(char* array[], int* io_value, char* file_name)
@@ -289,7 +284,6 @@ int main()
 
             process_input(buffer, arguments);
             execute_input(arguments);
-
         }
         else 
         {
@@ -302,3 +296,4 @@ int main()
 
     return 0;
 }
+
