@@ -99,3 +99,61 @@ waitpid function
 
 - Last, replace the input bracket so when we are runing the command it will not produced error
 
+
+
+# Complete flow of the program and detailed explanation
+To understand better, I created a flowchart of the program 
+
+![flowchart](flowchart/flowchart3.png)
+
+For the detailed explanation I will divided the steps based on the flowchart
+
+## Detailed Flowchart
+When you start the shell, you know you can are inside the shell based on the 'andrew shell#' 
+
+My major data structures uses array for list and arguments.
+
+1. Process input (process_input function)
+- First we will tokenize the input by using the strtok function
+- Then we check for the special characters in our program 
+    - check for '>' & the file output
+    - check for '<' & the file inputt
+    - check for & for background process
+
+2. Creating 2 process using fork function
+In shell, we want to continue our process by create 2 process, parent process and child process. Parent process will continue running, child process will be terminated after executing the command.
+
+In the 'execute_input' function there are 4 main component 
+
+a. & can't include any arguments
+b. '>' file output need to be opened
+    Besides that, I also owerite the file descriptor for stout with the file
+
+c. '<' file input need to be opened
+    Besides that, I also overwrite the file descriptor for stdin with the file
+
+d. Parent will execute after child process ended with waitpid()
+
+
+# Risk and Founded problem & Solutions
+
+## Risk
+The risk from my program is mainly come from corner case that haven't be consider. 
+For example: 
+1. No Command Before Special Characters
+Issue: The program does not check if a command exists before special characters (e.g., > output.txt or < input.txt).
+Solution: Ensure that there is a valid command before any special character.
+
+2. Empty Commands:
+The program doesn't handle empty commands (just pressing Enter). It should print a prompt again.
+This risk eventually become the founded problem
+
+## Founded Problem
+1. As from TA testing, he found that when running '&' command will fall into an infinite loop and display "not found". As picture below 
+
+
+As when i'm testing in the Linux, it works correctly, but i forget test this instruction in the linux. I suspect that the problem lies in the different ways of linux and minix process 2 different process. Thus the waitpid() will behave different, creating 'not found'. This 'not found' is come from 'enter' that pressed. So the program will not found 'enter' instructions, thus creating infinite loop. 
+
+Solution: 
+By fixing fgets code we solve that. We can handle check for NULL and handle it appropriately by printing an error message and possibly exiting the loop.
+

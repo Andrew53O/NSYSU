@@ -98,7 +98,7 @@ void execute_input(char* array[], int i, int* place_inputBracket, int* place_out
 
                     // output result 
                     if(*place_outputBracket >= 0)
-                    {
+                    { to 
                         int file_output = open(output_file, O_WRONLY | O_CREAT, 0777);
                         if (file_output == -1)
                         {
